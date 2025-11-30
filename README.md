@@ -30,7 +30,3 @@ O diretório `scripts/` contém a ordem de execução dos arquivos:
 2.  **Criação da Estrutura:** Execute o script `01_ddl_criacao_tabelas.sql`.
 3.  **Povoamento do Banco:** Execute o script `02_dml_insercao_dados.sql`.
 4.  **Testes:** Execute os scripts `03_dml_consultas_select.sql` e `04_dml_update_delete.sql` para testar a manipulação de dados e a integridade do sistema.
-
----
-
-Com este conteúdo, você tem a base completa para finalizar a etapa de implementação SQL do seu projeto. Gostaria de revisar ou adicionar mais alguma consulta específica para o script de `SELECT`?
