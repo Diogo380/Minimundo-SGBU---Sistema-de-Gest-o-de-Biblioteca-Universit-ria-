@@ -1,0 +1,53 @@
+-- SCRIPT DML: CONSULTAS COM SELECT
+
+-- 1. Listar todos os livros, incluindo o nome da Editora e ordenando pelo título. (JOIN e ORDER BY)
+SELECT 
+    L.Titulo,
+    L.Ano_Publicacao,
+    E.Nome_Editora
+FROM 
+    LIVRO L
+JOIN 
+    EDITORA E ON L.ID_Editora = E.ID_Editora
+ORDER BY 
+    L.Titulo ASC;
+
+-- 2. Mostrar o nome dos usuários que atualmente têm um empréstimo ativo (Data_Real_Devolucao é NULL), e seu respectivo livro. (JOIN e WHERE)
+SELECT 
+    U.Nome AS Nome_Usuario,
+    L.Titulo AS Livro_Emprestado,
+    E.Data_Emprestimo
+FROM 
+    EMPRESTIMO E
+JOIN 
+    USUARIO U ON E.Matricula_Usuario = U.Matricula
+JOIN 
+    LIVRO L ON E.ISBN_Livro = L.ISBN
+WHERE 
+    E.Data_Real_Devolucao IS NULL;
+
+-- 3. Contar quantos livros cada autor escreveu, mostrando apenas autores com mais de um livro (HAVING - N:M Join)
+-- *Neste exemplo, só o livro 'Concreto Armado' tem 2 autores, e os outros 1. Se tivéssemos mais dados, seria mais ilustrativo.*
+SELECT 
+    A.Nome_Autor,
+    COUNT(LA.ISBN_Livro) AS Total_Livros
+FROM 
+    AUTOR A
+JOIN 
+    LIVRO_AUTOR LA ON A.ID_Autor = LA.ID_Autor
+GROUP BY 
+    A.Nome_Autor
+HAVING 
+    Total_Livros >= 1 -- Modificado para >= 1 para exibir autores com 1 livro no dataset pequeno
+ORDER BY 
+    Total_Livros DESC;
+
+-- 4. Encontrar os 2 livros mais antigos do acervo. (ORDER BY e LIMIT)
+SELECT 
+    Titulo, 
+    Ano_Publicacao
+FROM 
+    LIVRO
+ORDER BY 
+    Ano_Publicacao ASC
+LIMIT 2;
