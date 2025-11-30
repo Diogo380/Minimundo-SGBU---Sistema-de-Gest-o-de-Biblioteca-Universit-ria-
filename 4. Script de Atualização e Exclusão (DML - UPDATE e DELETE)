@@ -1,0 +1,33 @@
+-- SCRIPT DML: ATUALIZAÇÃO (UPDATE) E EXCLUSÃO (DELETE)
+
+-- 1. UPDATE: Atualizar o estoque (Quantidade_Total) de um livro após a devolução.
+-- Supondo que o ISBN '9788575225492' foi devolvido e o estoque deve ser incrementado.
+UPDATE LIVRO
+SET Quantidade_Total = Quantidade_Total + 1
+WHERE ISBN = '9788575225492';
+
+-- 2. UPDATE: Corrigir o nome de um autor.
+UPDATE AUTOR
+SET Nome_Autor = 'Rogerio S. Pressman'
+WHERE Nome_Autor = 'Roger S. Pressman';
+
+-- 3. UPDATE: Aplicar um aumento de multa de 10% em todas as multas pendentes (onde a multa for > 0).
+UPDATE EMPRESTIMO
+SET Multa_Cobrada = Multa_Cobrada * 1.10
+WHERE Multa_Cobrada > 0.00;
+
+
+-- 1. DELETE: Excluir um usuário que nunca realizou empréstimos ou reservas (usuário 'A2022002').
+-- (Se houvesse FKs na tabela EMPRESTIMO e RESERVA com ON DELETE CASCADE, este comando seria mais simples; 
+-- como não há cascade padrão, garantimos que ele não tenha dependências antes de excluir).
+DELETE FROM USUARIO
+WHERE Matricula = 'A2022002'; -- Bruno Meireles - Usuário que não aparece no empréstimo
+
+-- 2. DELETE: Excluir todos os registros de empréstimo que já foram concluídos e não geraram multas.
+DELETE FROM EMPRESTIMO
+WHERE Data_Real_Devolucao IS NOT NULL 
+  AND Multa_Cobrada = 0.00;
+  
+-- 3. DELETE: Excluir um departamento que está obsoleto (e que não tenha usuários vinculados, ou os usuários já foram realocados).
+DELETE FROM DEPARTAMENTO
+WHERE Nome_Depto = 'Arquitetura e Urbanismo'; -- ID 3
