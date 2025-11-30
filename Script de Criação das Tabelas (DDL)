@@ -1,0 +1,78 @@
+-- SCRIPT DDL: CRIAÇÃO DO BANCO E TABELAS
+-- Assumindo o uso de MySQL (ajuste os tipos de dados para PostgreSQL se usar pgAdmin)
+
+CREATE DATABASE IF NOT EXISTS SGBU_Biblioteca;
+USE SGBU_Biblioteca;
+
+-- 1. Tabela DEPARTAMENTO
+CREATE TABLE DEPARTAMENTO (
+    ID_Depto INT PRIMARY KEY AUTO_INCREMENT,
+    Nome_Depto VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- 2. Tabela EDITORA
+CREATE TABLE EDITORA (
+    ID_Editora INT PRIMARY KEY AUTO_INCREMENT,
+    Nome_Editora VARCHAR(100) NOT NULL UNIQUE,
+    Cidade VARCHAR(50)
+);
+
+-- 3. Tabela USUARIO
+CREATE TABLE USUARIO (
+    Matricula VARCHAR(15) PRIMARY KEY,
+    Nome VARCHAR(150) NOT NULL,
+    Email VARCHAR(150) UNIQUE,
+    Tipo_Usuario ENUM('Aluno', 'Professor') NOT NULL,
+    ID_Depto INT NOT NULL,
+    FOREIGN KEY (ID_Depto) REFERENCES DEPARTAMENTO(ID_Depto)
+);
+
+-- 4. Tabela AUTOR
+CREATE TABLE AUTOR (
+    ID_Autor INT PRIMARY KEY AUTO_INCREMENT,
+    Nome_Autor VARCHAR(100) NOT NULL,
+    Nacionalidade VARCHAR(50)
+);
+
+-- 5. Tabela LIVRO
+CREATE TABLE LIVRO (
+    ISBN VARCHAR(13) PRIMARY KEY,
+    Titulo VARCHAR(200) NOT NULL,
+    Edicao INT,
+    Ano_Publicacao INT,
+    Quantidade_Total INT DEFAULT 0,
+    ID_Editora INT,
+    FOREIGN KEY (ID_Editora) REFERENCES EDITORA(ID_Editora)
+);
+
+-- 6. Tabela Associativa N:M (LIVRO_AUTOR)
+CREATE TABLE LIVRO_AUTOR (
+    ISBN_Livro VARCHAR(13),
+    ID_Autor INT,
+    PRIMARY KEY (ISBN_Livro, ID_Autor),
+    FOREIGN KEY (ISBN_Livro) REFERENCES LIVRO(ISBN) ON DELETE CASCADE,
+    FOREIGN KEY (ID_Autor) REFERENCES AUTOR(ID_Autor) ON DELETE CASCADE
+);
+
+-- 7. Tabela EMPRESTIMO
+CREATE TABLE EMPRESTIMO (
+    ID_Emprestimo INT PRIMARY KEY AUTO_INCREMENT,
+    Data_Emprestimo DATE NOT NULL,
+    Data_Prevista_Devolucao DATE NOT NULL,
+    Data_Real_Devolucao DATE,
+    Multa_Cobrada DECIMAL(10, 2) DEFAULT 0.00,
+    Matricula_Usuario VARCHAR(15) NOT NULL,
+    ISBN_Livro VARCHAR(13) NOT NULL,
+    FOREIGN KEY (Matricula_Usuario) REFERENCES USUARIO(Matricula),
+    FOREIGN KEY (ISBN_Livro) REFERENCES LIVRO(ISBN)
+);
+
+-- 8. Tabela RESERVA
+CREATE TABLE RESERVA (
+    ID_Reserva INT PRIMARY KEY AUTO_INCREMENT,
+    Data_Reserva DATETIME NOT NULL,
+    Matricula_Usuario VARCHAR(15) NOT NULL,
+    ISBN_Livro VARCHAR(13) NOT NULL,
+    FOREIGN KEY (Matricula_Usuario) REFERENCES USUARIO(Matricula),
+    FOREIGN KEY (ISBN_Livro) REFERENCES LIVRO(ISBN)
+);
