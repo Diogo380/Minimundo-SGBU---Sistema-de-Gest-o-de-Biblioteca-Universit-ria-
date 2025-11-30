@@ -1,0 +1,50 @@
+-- SCRIPT DML: INSERÇÃO DE DADOS INICIAIS
+
+-- DEPARTAMENTO
+INSERT INTO DEPARTAMENTO (Nome_Depto) VALUES
+('Ciência da Computação'),
+('Engenharia Civil'),
+('Arquitetura e Urbanismo'),
+('Medicina');
+
+-- EDITORA
+INSERT INTO EDITORA (Nome_Editora, Cidade) VALUES
+('Pearson', 'São Paulo'),
+('Elsevier', 'Rio de Janeiro'),
+('Editora Blucher', 'São Paulo');
+
+-- USUARIO (Alunos e Professores)
+INSERT INTO USUARIO (Matricula, Nome, Email, Tipo_Usuario, ID_Depto) VALUES
+('A2022001', 'Ana Clara Silva', 'ana.silva@exemplo.com', 'Aluno', 1),
+('P100', 'Dr. Roberto Santos', 'roberto.santos@exemplo.com', 'Professor', 1),
+('A2022002', 'Bruno Meireles', 'bruno.m@exemplo.com', 'Aluno', 2),
+('A2022003', 'Carla Dias', 'carla.dias@exemplo.com', 'Aluno', 3);
+
+-- AUTOR
+INSERT INTO AUTOR (Nome_Autor, Nacionalidade) VALUES
+('Andrew S. Tanenbaum', 'Holandesa'),
+('Rômulo L. F. P. A. de Mello', 'Brasileira'),
+('F. P. A. de Mello', 'Brasileira'),
+('Roger S. Pressman', 'Americana');
+
+-- LIVRO
+INSERT INTO LIVRO (ISBN, Titulo, Edicao, Ano_Publicacao, Quantidade_Total, ID_Editora) VALUES
+('9788575225492', 'Redes de Computadores e a Internet', 5, 2011, 5, 1),
+('9788521630138', 'Engenharia de Software: Uma Abordagem Profissional', 8, 2016, 3, 2),
+('9788521207604', 'Concreto Armado', 2, 2012, 4, 3);
+
+-- LIVRO_AUTOR (Ligação N:M)
+INSERT INTO LIVRO_AUTOR (ISBN_Livro, ID_Autor) VALUES
+('9788575225492', 1), -- Redes: Tanenbaum
+('9788521630138', 4), -- Engenharia: Pressman
+('9788521207604', 2), -- Concreto: Rômulo Mello
+('9788521207604', 3); -- Concreto: F. P. A. de Mello
+
+-- EMPRESTIMO (Dados de Empréstimos Ativos e Concluídos)
+INSERT INTO EMPRESTIMO (Data_Emprestimo, Data_Prevista_Devolucao, Data_Real_Devolucao, Multa_Cobrada, Matricula_Usuario, ISBN_Livro) VALUES
+-- Empréstimo ativo (Livro 1)
+('2025-11-20', '2025-12-05', NULL, 0.00, 'A2022001', '9788575225492'), 
+-- Empréstimo concluído (Livro 2)
+('2025-11-01', '2025-11-15', '2025-11-15', 0.00, 'P100', '9788521630138'),
+-- Empréstimo com multa (Livro 3)
+('2025-10-10', '2025-10-25', '2025-11-01', 15.00, 'A2022003', '9788521207604');
